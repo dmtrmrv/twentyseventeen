@@ -65,16 +65,23 @@ add_filter( 'body_class', 'twentyseventeen_body_classes' );
  * Primarily used to see if we have any panels active, duh.
  */
 function twentyseventeen_panel_count() {
-	$panels = array( '1', '2', '3', '4' );
 	$panel_count = 0;
 
-	foreach ( $panels as $panel ) {
+	for ( $panel = 1; $panel <= twentyseventeen_panel_count_max(); $panel++ ) {
 		if ( get_theme_mod( 'panel_' . $panel ) ) {
 			$panel_count++;
 		}
 	}
 
 	return $panel_count;
+}
+
+/**
+ * Return the maximum number of panels.
+ * @return int Filtered number of panels.
+ */
+function twentyseventeen_panel_count_max() {
+	return apply_filters( 'twentyseventeen_panel_count_max', 5 );
 }
 
 /**

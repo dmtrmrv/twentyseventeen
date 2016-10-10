@@ -40,7 +40,6 @@ get_header(); ?>
 
 		<?php
 		// Get each of our panels and show the post data.
-		$panels = array( '1', '2', '3', '4' );
 		$titles = array();
 
 		global $twentyseventeencounter; // Used in components/page/content-front-page-panels.php file.
@@ -49,7 +48,7 @@ get_header(); ?>
 
 			$twentyseventeencounter = 1;
 
-			foreach ( $panels as $panel ) :
+			for ( $panel = 1; $panel <= twentyseventeen_panel_count_max(); $panel++ ) :
 				if ( get_theme_mod( 'panel_' . $panel ) ) :
 					$post = get_post( get_theme_mod( 'panel_' . $panel ) );
 					setup_postdata( $post );
@@ -65,7 +64,7 @@ get_header(); ?>
 				endif;
 
 				$twentyseventeencounter++;
-			endforeach;
+			endfor;
 			?>
 
 	<?php endif; // The if ( 0 !== twentyseventeen_panel_count() ) ends here.

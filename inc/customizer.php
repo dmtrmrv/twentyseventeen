@@ -48,81 +48,27 @@ function twentyseventeen_customize_register( $wp_customize ) {
 		),
 	) );
 
-	// Panel 1.
-	$wp_customize->add_section( 'panel_1', array(
-		'title'           => __( 'Panel 1', 'twentyseventeen' ),
+	for ( $panel = 1; $panel <= twentyseventeen_panel_count_max(); $panel++ ) :
+
+	$wp_customize->add_section( 'panel_' . $panel , array(
+		'title'           => sprintf( __( 'Panel %s', 'twentyseventeen' ), esc_html( $panel ) ),
 		'active_callback' => 'is_front_page',
 		'panel'           => 'options_panel',
 		'description'     => __( 'Add an image to your panel by setting a featured image in the page editor. If you don&rsquo;t select a page, this panel will not be displayed.', 'twentyseventeen' ),
 	) );
 
-	$wp_customize->add_setting( 'panel_1', array(
+	$wp_customize->add_setting( 'panel_' . $panel, array(
 		'default'           => false,
 		'sanitize_callback' => 'absint',
 	) );
 
-	$wp_customize->add_control( 'panel_1', array(
+	$wp_customize->add_control( 'panel_' . $panel, array(
 		'label'   => __( 'Panel Content', 'twentyseventeen' ),
-		'section' => 'panel_1',
+		'section' => 'panel_' . $panel,
 		'type'    => 'dropdown-pages',
 	) );
 
-	// Panel 2.
-	$wp_customize->add_section( 'panel_2', array(
-		'title'           => __( 'Panel 2', 'twentyseventeen' ),
-		'active_callback' => 'is_front_page',
-		'panel'           => 'options_panel',
-		'description'     => __( 'Add an image to your panel by setting a featured image in the page editor. If you don&rsquo;t select a page, this panel will not be displayed.', 'twentyseventeen' ),
-	) );
-
-	$wp_customize->add_setting( 'panel_2', array(
-		'default'           => false,
-		'sanitize_callback' => 'absint',
-	) );
-
-	$wp_customize->add_control( 'panel_2', array(
-		'label'   => __( 'Panel Content', 'twentyseventeen' ),
-		'section' => 'panel_2',
-		'type'    => 'dropdown-pages',
-	) );
-
-	// Panel 3.
-	$wp_customize->add_section( 'panel_3', array(
-		'title'           => __( 'Panel 3', 'twentyseventeen' ),
-		'active_callback' => 'is_front_page',
-		'panel'           => 'options_panel',
-		'description'     => __( 'Add an image to your panel by setting a featured image in the page editor. If you don&rsquo;t select a page, this panel will not be displayed.', 'twentyseventeen' ),
-	) );
-
-	$wp_customize->add_setting( 'panel_3', array(
-		'default'           => false,
-		'sanitize_callback' => 'absint',
-	) );
-
-	$wp_customize->add_control( 'panel_3', array(
-		'label'   => __( 'Panel Content', 'twentyseventeen' ),
-		'section' => 'panel_3',
-		'type'    => 'dropdown-pages',
-	) );
-
-	// Panel 4.
-	$wp_customize->add_section( 'panel_4', array(
-		'title'           => __( 'Panel 4', 'twentyseventeen' ),
-		'active_callback' => 'is_front_page',
-		'panel'           => 'options_panel',
-		'description'     => __( 'Add an image to your panel by setting a featured image in the page editor. If you don&rsquo;t select a page, this panel will not be displayed.', 'twentyseventeen' ),
-	) );
-
-	$wp_customize->add_setting( 'panel_4', array(
-		'default'           => false,
-		'sanitize_callback' => 'absint',
-	) );
-
-	$wp_customize->add_control( 'panel_4', array(
-		'label'   => __( 'Panel Content', 'twentyseventeen' ),
-		'section' => 'panel_4',
-		'type'    => 'dropdown-pages',
-	) );
+	endfor;
 }
 add_action( 'customize_register', 'twentyseventeen_customize_register' );
 
@@ -160,6 +106,14 @@ add_action( 'customize_preview_init', 'twentyseventeen_customize_preview_js' );
  * Some extra JavaScript to improve the user experience in the Customizer for this theme.
  */
 function twentyseventeen_panels_js() {
-	wp_enqueue_script( 'twentyseventeen-panel-customizer', get_template_directory_uri() . '/assets/js/panel-customizer.js', array(), '20151116', true );
+	wp_register_script(
+		'twentyseventeen-panel-customizer',
+		get_template_directory_uri() . '/assets/js/panel-customizer.js',
+		array(),
+		'20151116',
+		true
+	);
+	wp_enqueue_script( 'twentyseventeen-panel-customizer' );
+	wp_localize_script( 'twentyseventeen-panel-customizer', 'twentyseventeenPanelCountMax', array( twentyseventeen_panel_count_max() ) );
 }
 add_action( 'customize_controls_enqueue_scripts', 'twentyseventeen_panels_js' );
